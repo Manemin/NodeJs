@@ -13,11 +13,11 @@ const path = require('path');
 
 function swapFiles(dir1, dir2) {
     const listDir = [dir1, dir2];
-    listFiles = {};
+    let listFiles = {};
 
-    const findPath = (path) => {
-        const [newPath] = listDir.filter(dir => dir !== path);
-        return newPath;
+    const newPath = (oldPath) => {
+        const [path] = listDir.filter(dir => dir !== oldPath);
+        return path;
     };
 
     listDir.forEach(dir => {
@@ -25,7 +25,7 @@ function swapFiles(dir1, dir2) {
     })
 
     for (const [dir, list] of Object.entries(listFiles)) {
-        list.map(file => fs.renameSync(path.join(dir, file), path.join(findPath(dir), file)));
+        list.map(file => fs.renameSync(path.join(dir, file), path.join(newPath(dir), file)));
     }
 }
 
