@@ -15,8 +15,8 @@ function swapFiles(dir1, dir2) {
     const listDir = [dir1, dir2];
     let listFiles = {};
 
-    const newPath = (oldPath) => {
-        const [path] = listDir.filter(dir => dir !== oldPath);
+    const newFolder = (currentFolder) => {
+        const [path] = listDir.filter(folder => folder !== currentFolder);
         return path;
     };
 
@@ -25,8 +25,9 @@ function swapFiles(dir1, dir2) {
     })
 
     for (const [dir, list] of Object.entries(listFiles)) {
-        list.map(file => fs.renameSync(path.join(dir, file), path.join(newPath(dir), file)));
+        list.map(file => fs.renameSync(path.join(dir, file), path.join(newFolder(dir), file)));
     }
+    console.log('done');
 }
 
 
