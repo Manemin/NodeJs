@@ -6,18 +6,17 @@ const fs = require('fs');
 const app = express();
 const pathToViews = path.join(process.cwd(), 'public');
 const db = path.join(process.cwd(), './db/users.json');
+let isUserAuth = false;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(pathToViews));
 
+app.set('views', pathToViews);
 app.set('view engine', '.hbs');
 app.engine('.hbs', expHbs({
     defaultLayout: false
 }));
-app.set('views', pathToViews);
-
-let isUserAuth = false;
 
 function verify(login, users) {
     return users.find((user) => user.email === login.email && user.password === login.password);
@@ -35,6 +34,7 @@ app.get('/auth', (req, res) => {
                 res.render('error', { msg: 'technical work in progress' });
                 return;
             }
+
             const users = JSON.parse(data);
             res.render('login', { users });
         });
@@ -50,8 +50,10 @@ app.post('/auth', (req, res) => {
             res.render('error', { msg: 'not authorized' });
             return;
         }
+
         const usersDb = JSON.parse(data);
         const user = verify(req.body, usersDb);
+
         if (user) {
             isUserAuth = true;
             res.render('login', { users: usersDb });
@@ -72,8 +74,10 @@ app.post('/signup', (req, res) => {
             res.render('error', { msg: 'technical work in progress' });
             return;
         }
+
         const usersDb = JSON.parse(data);
         const user = verify(req.body, usersDb);
+
         if (!user) {
             usersDb.push(req.body);
             fs.writeFile(db, JSON.stringify(usersDb), (err1) => {
