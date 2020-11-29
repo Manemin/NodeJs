@@ -12,9 +12,23 @@ const path = require('path');
 // }
 
 function swapFiles(dir1, dir2) {
-    const listDir = [...arguments];
+    const listDir = [dir1, dir2];
+    let listFiles = {};
+
+    const newFolder = (currentFolder) => {
+        const [path] = listDir.filter(folder => folder !== currentFolder);
+        return path;
+    };
+
     listDir.forEach(dir => {
+        listFiles[dir] = fs.readdirSync(dir);
     })
+
+    for (const [dir, list] of Object.entries(listFiles)) {
+        list.map(file => fs.renameSync(path.join(dir, file), path.join(newFolder(dir), file)));
+    }
+    console.log('done');
 }
+
 
 swapFiles('1800', '2000');
