@@ -23,16 +23,6 @@ function verify(login, users) {
     return users.find((user) => user.email === login.email && user.password === login.password);
 }
 
-// function errMessage(key) {
-//     switch (key) {
-//         case 'login':
-//             return 'not found';
-//         case 'sign':
-//             return 'already exist';
-//
-//     }
-// }
-
 app.get('/', (req, res) => {
     res.render('index');
 });
@@ -40,7 +30,7 @@ app.get('/', (req, res) => {
 app.get('/auth', (req, res) => {
     if (isUserAuth) {
         fs.readFile(db, 'utf8', (err, data) => {
-            if (err) throw err;
+            if (err) console.log(err);
             const users = JSON.parse(data);
             res.render('login', { users });
         });
@@ -51,7 +41,7 @@ app.get('/auth', (req, res) => {
 
 app.post('/auth', (req, res) => {
     fs.readFile(db, 'utf8', (err, data) => {
-        if (err) throw err;
+        if (err) console.log(err);
         const usersDb = JSON.parse(data);
         const user = verify(req.body, usersDb);
         if (user) {
@@ -69,13 +59,13 @@ app.get('/signup', (req, res) => {
 
 app.post('/signup', (req, res) => {
     fs.readFile(db, 'utf8', (err, data) => {
-        if (err) throw err;
+        if (err) console.log(err);
         const usersDb = JSON.parse(data);
         const user = verify(req.body, usersDb);
         if (!user) {
             usersDb.push(req.body);
             fs.writeFile(db, JSON.stringify(usersDb), (err1) => {
-                if (err1) throw err1;
+                if (err1) console.log(err1);
             });
             res.redirect('/');
         } else {
