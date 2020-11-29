@@ -30,7 +30,11 @@ app.get('/', (req, res) => {
 app.get('/auth', (req, res) => {
     if (isUserAuth) {
         fs.readFile(db, 'utf8', (err, data) => {
-            if (err) console.log(err);
+            if (err) {
+                console.log(err);
+                res.render('error', { msg: 'technical work in progress' });
+                return;
+            }
             const users = JSON.parse(data);
             res.render('login', { users });
         });
@@ -41,7 +45,11 @@ app.get('/auth', (req, res) => {
 
 app.post('/auth', (req, res) => {
     fs.readFile(db, 'utf8', (err, data) => {
-        if (err) console.log(err);
+        if (err) {
+            console.log(err);
+            res.render('error', { msg: 'not authorized' });
+            return;
+        }
         const usersDb = JSON.parse(data);
         const user = verify(req.body, usersDb);
         if (user) {
@@ -59,13 +67,20 @@ app.get('/signup', (req, res) => {
 
 app.post('/signup', (req, res) => {
     fs.readFile(db, 'utf8', (err, data) => {
-        if (err) console.log(err);
+        if (err) {
+            console.log(err);
+            res.render('error', { msg: 'technical work in progress' });
+            return;
+        }
         const usersDb = JSON.parse(data);
         const user = verify(req.body, usersDb);
         if (!user) {
             usersDb.push(req.body);
             fs.writeFile(db, JSON.stringify(usersDb), (err1) => {
-                if (err1) console.log(err1);
+                if (err1) {
+                    console.log(err1);
+                    res.render('error', { msg: 'technical work in progress' });
+                }
             });
             res.redirect('/');
         } else {
