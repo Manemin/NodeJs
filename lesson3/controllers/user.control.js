@@ -1,27 +1,25 @@
+const userService = require('../services/user.services');
+
+const isNewUser = (user, db) => db.find((dbUser) => user.email === dbUser.email);
+
 module.exports = {
     createUser: (req, res) => {
-        fs.readFile(db, 'utf8', (err, data) => {
-            if (err) {
-                console.log(err);
-                res.render('error', { msg: 'technical work in progress' });
-                return;
-            }
+        userService.readDb()
+            .then((db) => {
+                const user = isNewUser(req.body, db);
 
-            const usersDb = JSON.parse(data);
-            const user = verify(req.body, usersDb);
+                if (user) {
+                    res.render('error', { login: req.body, msg: 'already exists' });
+                    return;
+                }
 
-            if (!user) {
-                usersDb.push(req.body);
-                fs.writeFile(db, JSON.stringify(usersDb), (err1) => {
-                    if (err1) {
-                        console.log(err1);
-                        res.render('error', { msg: 'technical work in progress' });
-                    }
-                });
-                res.redirect('/');
-            } else {
-                res.render('error', { login: req.body, msg: 'already exist' });
-            }
-        });
+                db.push(req.body);
+                userService.writeDb(db);
+                res.redirect('/signup');
+            })
+            .catch((e) => {
+                console.log(e);
+                res.render('error', { msg: 'oops, something wrong, please w8, we fix it', serv: true });
+            });
     }
 };

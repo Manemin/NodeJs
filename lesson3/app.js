@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const expHbs = require('express-handlebars');
 const fs = require('fs');
+const userRouter = require('./routers/userRouters');
 
 const app = express();
 const pathToViews = path.join(process.cwd(), 'public');
@@ -19,22 +20,18 @@ app.engine('.hbs', expHbs({
     defaultLayout: false
 }));
 
-//----------------
-const services = require('./services/user.services');
-
-services.readDb().then((data) => console.log(typeof data));
-// console.log(a);
-//----------------
-
+// -------------
+app.use('/signup', userRouter);
+// -------------
 
 // function verify(login, users) {
 //     return users.find((user) => user.email === login.email && user.password === login.password);
 // }
-//
+
 // app.get('/', (req, res) => {
 //     res.render('index');
 // });
-//
+
 // app.get('/auth', (req, res) => {
 //     if (isUserAuth) {
 //         fs.readFile(db, 'utf8', (err, data) => {
@@ -43,7 +40,7 @@ services.readDb().then((data) => console.log(typeof data));
 //                 res.render('error', { msg: 'technical work in progress' });
 //                 return;
 //             }
-//
+
 //             const users = JSON.parse(data);
 //             res.render('login', { users });
 //         });
@@ -51,7 +48,7 @@ services.readDb().then((data) => console.log(typeof data));
 //         res.render('error', { msg: 'not authorized' });
 //     }
 // });
-//
+
 // app.post('/auth', (req, res) => {
 //     fs.readFile(db, 'utf8', (err, data) => {
 //         if (err) {
@@ -59,10 +56,10 @@ services.readDb().then((data) => console.log(typeof data));
 //             res.render('error', { msg: 'not authorized' });
 //             return;
 //         }
-//
+
 //         const usersDb = JSON.parse(data);
 //         const user = verify(req.body, usersDb);
-//
+
 //         if (user) {
 //             isUserAuth = true;
 //             res.render('login', { users: usersDb });
@@ -71,11 +68,11 @@ services.readDb().then((data) => console.log(typeof data));
 //         }
 //     });
 // });
-//
-// app.get('/signup', (req, res) => {
-//     res.render('signup');
-// });
-//
+
+app.get('/signup', (req, res) => {
+    res.render('signup');
+});
+
 // app.post('/signup', (req, res) => {
 //     fs.readFile(db, 'utf8', (err, data) => {
 //         if (err) {
@@ -83,10 +80,10 @@ services.readDb().then((data) => console.log(typeof data));
 //             res.render('error', { msg: 'technical work in progress' });
 //             return;
 //         }
-//
+
 //         const usersDb = JSON.parse(data);
 //         const user = verify(req.body, usersDb);
-//
+
 //         if (!user) {
 //             usersDb.push(req.body);
 //             fs.writeFile(db, JSON.stringify(usersDb), (err1) => {
@@ -101,7 +98,7 @@ services.readDb().then((data) => console.log(typeof data));
 //         }
 //     });
 // });
-//
+
 // app.post('/logout', (req, res) => {
 //     isUserAuth = false;
 //     res.redirect('/');
