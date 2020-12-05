@@ -1,11 +1,20 @@
 const { Router } = require('express');
+
 const userControl = require('../controllers/user.control');
-const usermiddleware = require('../middlewares/usermiddleware');
+const userMiddleware = require('../middlewares/usermiddleware');
 
-const userRouter = Router();
+const signRouter = Router();
+const loginRouter = Router();
+const findRouter = Router();
 
-userRouter.get('/'); // login;
+signRouter.post('/', userMiddleware.checkValidity, userMiddleware.isNewUser, userControl.createUser);
+signRouter.get('/', userControl.showReg);
 
-module.exports = userRouter;
+loginRouter.get('/', userControl.showUsers);
+loginRouter.get('/delete', userControl.deleteUser);
+loginRouter.post('/', userMiddleware.checkValidity, userMiddleware.checkUser, userControl.showUsers);
 
-userRouter.post('/', usermiddleware.checkValidity, usermiddleware.isNewUser, userControl.createUser);
+findRouter.get('/', userControl.showFind);
+findRouter.post('/', userMiddleware.findUser, userControl.showFounded);
+
+module.exports = { signRouter, loginRouter, findRouter };

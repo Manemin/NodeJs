@@ -1,25 +1,40 @@
 const userService = require('../services/user.services');
 
-// const isNewUser = (user, db) => db.find((dbUser) => user.email === dbUser.email);
+const msgErr = 'oops, something wrong, please w8, we fix it';
 
 module.exports = {
+    showReg: (req, res) => {
+        res.render('signup');
+    },
     createUser: (req, res) => {
         userService.readDb()
             .then((db) => {
-                // const user = isNewUser(req.body, db);
-
-                // if (user) {
-                //     res.render('error', { login: req.body, msg: 'already exists' });
-                //     return;
-                // }
-
                 db.push(req.body);
                 userService.writeDb(db);
-                res.redirect('/signup');
+                res.redirect('/');
             })
             .catch((e) => {
                 console.log(e);
-                res.render('error', { msg: 'oops, something wrong, please w8, we fix it', serv: true });
+                res.render('error', { msgErr });
             });
+    },
+    showUsers: (req, res) => {
+        userService.readDb()
+            .then((data) => {
+                res.render('login', { users: data });
+            })
+            .catch((e) => {
+                console.log(e);
+                res.render('error', { msgErr });
+            });
+    },
+    deleteUser: (req, res) => {
+        res.send(req.body);
+    },
+    showFind: (req, res) => {
+        res.render('find');
+    },
+    showFounded: (req, res) => {
+        res.send(req.founded);
     }
 };
