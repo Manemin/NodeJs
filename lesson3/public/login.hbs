@@ -20,8 +20,14 @@
     </ul>
     <form>
         <button formaction="/find" formmethod="get">find</button>
-        <button formaction="/auth/delete" formmethod="get">delete</button>
+        <button formaction="/auth/logout" formmethod="get">logout</button>
     </form>
+    <form action="/auth/delete" method="post">
+        <input  name="email" value={{user.email}} hidden>
+        <input type="submit" value="delete">
+
+    </form>
+
 </div>
 
 </body>

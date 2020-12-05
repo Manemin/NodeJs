@@ -4,7 +4,7 @@ const found = (db, user, key = 'register') => {
     const result = db.find((userDb) => userDb.email === user.email);
 
     if (key === 'login' && result) {
-        return result.password === user.password;
+        return (result.password === user.password) ? result : false;
     }
     return result;
 };
@@ -40,10 +40,12 @@ module.exports = {
         userServices.readDb()
             .then((data) => {
                 try {
-                    if (!found(data, req.body, 'login')) {
+                    const check = found(data, req.body, 'login');
+                    if (!check) {
                         throw new Error('name or password is not valid');
                     }
-
+                    req.isActive = true;
+                    req.user = check;
                     next();
                 } catch (e) {
                     res.render('error', { msg: e.message });

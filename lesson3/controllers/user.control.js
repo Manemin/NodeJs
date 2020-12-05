@@ -1,6 +1,7 @@
 const userService = require('../services/user.services');
 
 const msgErr = 'oops, something wrong, please w8, we fix it';
+let isActive = false;
 
 module.exports = {
     showReg: (req, res) => {
@@ -19,22 +20,42 @@ module.exports = {
             });
     },
     showUsers: (req, res) => {
+        try {
+            isActive = req.isActive;
+            if (!isActive) throw new Error('You are not authorized');
+            userService.readDb()
+                .then((data) => {
+                    res.render('login', { users: data, user: req.user });
+                })
+                .catch((e) => {
+                    console.log(e);
+                    res.render('error', { msgErr });
+                });
+        } catch (e) {
+            res.render('error', { msg: e.message });
+        }
+    },
+    deleteUser: (req, res) => {
         userService.readDb()
             .then((data) => {
-                res.render('login', { users: data });
+                const { email } = req.body;
+                const filtered = data.filter((userDb) => userDb.email !== email);
+                userService.writeDb(filtered);
+                res.render('error', { msg: 'user deleted' });
             })
             .catch((e) => {
                 console.log(e);
-                res.render('error', { msgErr });
+                res.status(400).json(e.message);
             });
-    },
-    deleteUser: (req, res) => {
-        res.send(req.body);
     },
     showFind: (req, res) => {
         res.render('find');
     },
-    showFounded: (req, res) => {
+    showFound: (req, res) => {
         res.send(req.founded);
+    },
+    logout: (req, res) => {
+        isActive = false;
+        res.redirect('/');
     }
 };

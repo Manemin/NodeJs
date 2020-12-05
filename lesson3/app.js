@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
 app.use('/signup', signRouter);
 app.use('/auth', loginRouter);
 app.use('/find', findRouter);
-app.use('/auth/delete', loginRouter);
+
 app.listen(5000, () => {
     console.log('port listen 5000');
 });

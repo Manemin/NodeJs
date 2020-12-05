@@ -11,10 +11,11 @@ signRouter.post('/', userMiddleware.checkValidity, userMiddleware.isNewUser, use
 signRouter.get('/', userControl.showReg);
 
 loginRouter.get('/', userControl.showUsers);
-loginRouter.get('/delete', userControl.deleteUser);
+loginRouter.get('/logout', userControl.logout);
+loginRouter.post('/delete', userControl.deleteUser);
 loginRouter.post('/', userMiddleware.checkValidity, userMiddleware.checkUser, userControl.showUsers);
 
 findRouter.get('/', userControl.showFind);
-findRouter.post('/', userMiddleware.findUser, userControl.showFounded);
+findRouter.post('/', userMiddleware.findUser, userControl.showFound);
 
 module.exports = { signRouter, loginRouter, findRouter };
