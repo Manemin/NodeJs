@@ -1,7 +1,7 @@
 const re = /\S+@\S+\.\S+/;
 
 module.exports = {
-    isValidId: (req, res, next) => {
+    isIdValid: (req, res, next) => {
         try {
             const { id } = req.params;
 

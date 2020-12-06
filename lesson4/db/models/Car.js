@@ -19,13 +19,13 @@ module.exports = (client, dataTypes) => {
                 type: dataTypes.STRING,
                 allowNull: false,
             },
-            user_id: {
+            UserId: {
                 type: dataTypes.INTEGER,
                 allowNull: false,
             },
         },
         {
-            tableName: 'Car',
+            tableName: 'cars',
             timestamps: false,
         }
     );

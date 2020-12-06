@@ -7,7 +7,13 @@ module.exports = {
     },
     findUserById: (id) => {
         const userModel = db.getModel('User');
-        return userModel.findByPk(id);
+        const carModel = db.getModel('Car');
+        userModel.hasMany(carModel);
+        carModel.belongsTo(userModel);
+        return userModel.findAll({
+            include: [carModel],
+            where: { id }
+        });
     },
     findByParams: (field, value) => {
         const userModel = db.getModel('User');

@@ -8,11 +8,11 @@ const userCreateRouter = Router();
 const delUserRouter = Router();
 
 userRouter.get('/', userControl.showUsers);
-userRouter.post('/:id', userMiddleware.isValidId, userControl.findById);
+userRouter.post('/:id', userMiddleware.isIdValid, userControl.findById);
 userRouter.post('/:?', userMiddleware.isQueryParamValid, userControl.findByParam);
 
 userCreateRouter.post('/', userControl.createUser);
 
-delUserRouter.post('/:id', userMiddleware.isValidId, userControl.deleteUser);
+delUserRouter.post('/:id', userMiddleware.isIdValid, userControl.deleteUser);
 
 module.exports = { userRouter, userCreateRouter, delUserRouter };
