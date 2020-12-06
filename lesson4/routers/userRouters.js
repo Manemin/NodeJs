@@ -6,13 +6,21 @@ const userMiddleware = require('../middlewares/usermiddleware');
 const userRouter = Router();
 const userCreateRouter = Router();
 const delUserRouter = Router();
+const updUserRouter = Router();
 
 userRouter.get('/', userControl.showUsers);
 userRouter.post('/:id', userMiddleware.isIdValid, userControl.findById);
 userRouter.post('/:?', userMiddleware.isQueryParamValid, userControl.findByParam);
 
-userCreateRouter.post('/', userControl.createUser);
+userCreateRouter.post('/', userMiddleware.isUserValid, userControl.createUser);
 
-delUserRouter.post('/:id', userMiddleware.isIdValid, userControl.deleteUser);
+updUserRouter.post('/:id', userMiddleware.isIdValid, userControl.updateUser);
 
-module.exports = { userRouter, userCreateRouter, delUserRouter };
+delUserRouter.post('/:id', userMiddleware.isIdValid, userMiddleware.isUserValid, userControl.deleteUser);
+
+module.exports = {
+    userRouter,
+    userCreateRouter,
+    delUserRouter,
+    updUserRouter
+};

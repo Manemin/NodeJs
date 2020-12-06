@@ -37,5 +37,15 @@ module.exports = {
             res.status(400).json(e.message);
         }
     },
+    isUserValid: (req, res, next) => {
+        try {
+            const { name, email, password } = req.body;
 
+            if (!name || !re.test(email) || !password) throw new Error('Name (email, pwd) is not valid');
+
+            next();
+        } catch (e) {
+            res.status(400).json(e.message);
+        }
+    },
 };

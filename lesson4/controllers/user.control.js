@@ -51,5 +51,14 @@ module.exports = {
         } catch (e) {
             res.status(400).json(e.message);
         }
+    },
+    updateUser: async (req, res) => {
+        try {
+            await userService.updateUser(req.params, req.body);
+
+            res.json('User updated');
+        } catch (e) {
+            res.status(400).json(e.message);
+        }
     }
 };
