@@ -28,18 +28,6 @@ module.exports = {
             res.status(400).json(e.message);
         }
     },
-    findById: async (req, res) => {
-        try {
-            const { id } = req.params;
-            const user = await userService.findUserById(id);
-
-            if (user === null) throw new Error('User not found');
-
-            res.json(user);
-        } catch (e) {
-            res.status(400).json(e.message);
-        }
-    },
     findByParam: async (req, res) => {
         try {
             const { key, val } = req.validQuery;

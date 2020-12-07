@@ -6,7 +6,7 @@ module.exports = {
 
         return userModel.findAll();
     },
-    findUserById: (id) => {
+    findByParams: (field, value) => {
         const userModel = db.getModel('User');
         const carModel = db.getModel('Car');
 
@@ -15,14 +15,8 @@ module.exports = {
 
         return userModel.findAll({
             include: [carModel],
-            where: { id }
-        });
-    },
-    findByParams: (field, value) => {
-        const userModel = db.getModel('User');
-
-        return userModel.findAll({
             where: { [field]: value }
+
         });
     },
     putUser: (user) => {

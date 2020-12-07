@@ -22,6 +22,7 @@ module.exports = (client, dataTypes) => {
             UserId: {
                 type: dataTypes.INTEGER,
                 allowNull: false,
+                foreignKey: true
             },
         },
         {
