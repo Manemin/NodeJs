@@ -16,7 +16,6 @@ module.exports = {
         try {
             const [key] = Object.keys(req.query);
             const [val] = Object.values(req.query);
-            console.log(key, val);
             switch (key) {
                 case 'name':
                     if (!val) throw new Error('name is not valid');
