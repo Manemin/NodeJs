@@ -8,13 +8,9 @@ module.exports = {
     },
     findByParams: (field, value) => {
         const userModel = db.getModel('User');
-        const carModel = db.getModel('Car');
-
-        userModel.hasMany(carModel);
-        carModel.belongsTo(userModel);
 
         return userModel.findAll({
-            include: [carModel],
+            include: 'Car',
             where: { [field]: value }
 
         });
