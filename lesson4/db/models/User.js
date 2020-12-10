@@ -26,7 +26,9 @@ module.exports = (client, dataTypes) => {
             timestamps: false,
         }
     );
+
     const Car = require('./Car')(client, dataTypes);
-    User.hasOne(Car, { foreignKey: 'user_id' });
+    User.hasMany(Car, { foreignKey: 'user_id', as: 'Car' });
+
     return User;
 };
