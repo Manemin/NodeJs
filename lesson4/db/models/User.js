@@ -28,7 +28,7 @@ module.exports = (client, dataTypes) => {
     );
 
     const Car = require('./Car')(client, dataTypes);
-    User.hasMany(Car, { foreignKey: 'user_id', as: 'Car' });
+    User.hasMany(Car, { foreignKey: 'user_id', as: 'user_car', onDelete: 'cascade' });
 
     return User;
 };

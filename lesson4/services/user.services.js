@@ -10,7 +10,7 @@ module.exports = {
         const userModel = db.getModel('User');
 
         return userModel.findAll({
-            include: 'Car',
+            include: 'user_car',
             where: { [field]: value }
 
         });
