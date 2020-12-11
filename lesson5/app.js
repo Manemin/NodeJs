@@ -12,6 +12,16 @@ app.use(express.json());
 
 app.use('/users', userRouter);
 
+// eslint-disable-next-line no-unused-vars
+app.use('*', (err, req, res, next) => {
+    res
+        .status(err.code)
+        .json({
+            message: err.message,
+            ok: false
+        });
+});
+
 app.listen(5000, () => {
     console.log('port listen 5000');
 });

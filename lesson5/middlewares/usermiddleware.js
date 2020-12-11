@@ -1,3 +1,5 @@
+const { ErrorHandler, errors, errorCode } = require('../error');
+
 const re = /\S+@\S+\.\S+/;
 
 module.exports = {
@@ -5,11 +7,11 @@ module.exports = {
         try {
             const { id } = req.params;
 
-            if (!parseInt(id, 10) || id < 1) throw new Error('id is not valid');
+            if (!parseInt(id, 10) || id < 1) throw new ErrorHandler(errors.BAD_REQUEST, errorCode.BAD_REQUEST);
 
             next();
         } catch (e) {
-            res.status(400).json(e.message);
+            next(e);
         }
     },
     isQueryParamValid: (req, res, next) => {
@@ -21,30 +23,30 @@ module.exports = {
                     if (!val) throw new Error('name is not valid');
                     break;
                 case 'id':
-                    if (!parseInt(val, 10) || val < 1) throw new Error('id is not valid');
+                    if (!parseInt(val, 10) || val < 1) throw new ErrorHandler(errors.BAD_REQUEST, errorCode.BAD_REQUEST);
                     break;
                 case 'email':
-                    if (!re.test(val)) throw new Error('email is not valid');
+                    if (!re.test(val)) throw new ErrorHandler(errors.BAD_REQUEST, errorCode.BAD_REQUEST);
                     break;
                 default:
-                    throw new Error('query is not valid');
+                    throw new ErrorHandler(errors.BAD_REQUEST, errorCode.BAD_REQUEST);
             }
 
             req.validQuery = { key, val };
             next();
         } catch (e) {
-            res.status(400).json(e.message);
+            next(e);
         }
     },
     isUserValid: (req, res, next) => {
         try {
             const { name, email, password } = req.body;
 
-            if (!name || !re.test(email) || !password) throw new Error('Name (email, pwd) is not valid');
+            if (!name || !re.test(email) || !password) throw new ErrorHandler(errors.BAD_REQUEST, errorCode.BAD_REQUEST);
 
             next();
         } catch (e) {
-            res.status(400).json(e.message);
+            next(e);
         }
     },
 };
