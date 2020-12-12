@@ -43,7 +43,6 @@ module.exports = {
         compare(req.body.password, dbPwd);
 
         userService.userAuth();
-
         res.json('Welcome');
     }
 };

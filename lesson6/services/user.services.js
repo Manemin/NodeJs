@@ -10,7 +10,7 @@ module.exports = {
         const userModel = db.getModel('User');
 
         return userModel.findAll({
-            includenext: 'user_car',
+            include: 'user_car',
             where: param
         });
     },
