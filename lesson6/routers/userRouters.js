@@ -6,6 +6,7 @@ const {
         findByParam,
         deleteUser,
         updateUser,
+        userLogin,
     }
 } = require('../controllers');
 const {
@@ -15,12 +16,15 @@ const {
         isDataValid,
         isValidId,
         findById,
+        isLoginValid,
+        checkLogin,
     }
 } = require('../middlewares');
 
 const userRouter = Router();
 
 userRouter.get('/', isDataValid, findByParam);
+userRouter.post('/', isLoginValid, checkLogin, userLogin);
 userRouter.delete('/:id', isValidId, findById, deleteUser);
 userRouter.patch('/:id', isValidId, isDataValid, findById, updateUser);
 userRouter.put('/', isNewUserValid, isUserPresent, addNewUser);

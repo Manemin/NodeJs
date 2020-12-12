@@ -1,8 +1,12 @@
 const { userService } = require('../services');
 const { ErrorHandler, errors: { USER_NOT_FOUND } } = require('../error');
+const { hash, compare } = require('../helpers/password.helper');
 
 module.exports = {
     addNewUser: async (req, res) => {
+        const password = await hash(req.body.password);
+
+        Object.assign(req.body, { password });
         await userService.putUser(req.body);
 
         res.json('User added');
@@ -32,5 +36,14 @@ module.exports = {
         await userService.updateData(req.params, req.body);
 
         res.json('User updated');
+    },
+    userLogin: (req, res) => {
+        const { dbPwd } = req.body;
+
+        compare(req.body.password, dbPwd);
+
+        userService.userAuth();
+
+        res.json('Welcome');
     }
 };

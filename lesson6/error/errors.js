@@ -9,5 +9,9 @@ module.exports = {
     USER_AlREADY_EXIST: {
         message: 'User already exist',
         code: BAD_REQUEST
+    },
+    AUTH_NOT_VALID: {
+        message: 'password or email not valid',
+        code: BAD_REQUEST
     }
 };

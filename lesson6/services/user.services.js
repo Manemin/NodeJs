@@ -10,7 +10,7 @@ module.exports = {
         const userModel = db.getModel('User');
 
         return userModel.findAll({
-            include: 'user_car',
+            includenext: 'user_car',
             where: param
         });
     },
@@ -28,5 +28,8 @@ module.exports = {
         const userModel = db.getModel('User');
 
         userModel.destroy({ where: id });
+    },
+    userAuth: () => {
+        // something doing
     }
 };

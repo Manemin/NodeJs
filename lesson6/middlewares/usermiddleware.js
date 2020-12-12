@@ -8,12 +8,14 @@ const {
     errors: {
         USER_AlREADY_EXIST,
         USER_NOT_FOUND,
+        AUTH_NOT_VALID,
     }
 } = require('../error');
 const {
     newUserValidator,
     paramsValidator,
     idValidator,
+    authValidator,
 } = require('../validators');
 
 module.exports = {
@@ -77,5 +79,31 @@ module.exports = {
         } catch (e) {
             next(e);
         }
-    }
+    },
+    isLoginValid: (req, res, next) => {
+        try {
+            const { error } = authValidator.validate(req.body);
+
+            if (error) throw new ErrorHandler(AUTH_NOT_VALID.message, AUTH_NOT_VALID.code);
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
+    checkLogin: async (req, res, next) => {
+        try {
+            const user = db.getModel('User');
+            const { email } = req.body;
+
+            const result = await user.findOne({ where: { email } });
+
+            if (!result) throw new ErrorHandler(AUTH_NOT_VALID.message, AUTH_NOT_VALID.code);
+
+            req.body.dbPwd = result.password;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    },
 };
