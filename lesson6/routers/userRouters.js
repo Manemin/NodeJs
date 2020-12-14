@@ -24,9 +24,9 @@ const {
 const userRouter = Router();
 
 userRouter.get('/', isDataValid, findByParam);
-userRouter.post('/', isLoginValid, checkLogin, userLogin);
+userRouter.post('/', isNewUserValid, isUserPresent, addNewUser);
+userRouter.post('/auth', isLoginValid, checkLogin, userLogin);
 userRouter.delete('/:id', isValidId, findById, deleteUser);
 userRouter.patch('/:id', isValidId, isDataValid, findById, updateUser);
-userRouter.put('/', isNewUserValid, isUserPresent, addNewUser);
 
 module.exports = { userRouter };
