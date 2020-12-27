@@ -1,15 +1,23 @@
-const { userService } = require('../services');
+const { userService, mailService } = require('../services');
 const { errors: { USER_NOT_FOUND } } = require('../error');
 const { pwdHelper: { hash } } = require('../helpers');
+const { emailActions: { WELCOME, USER_DELETED } } = require('../constants');
 
 module.exports = {
-    addNewUser: async (req, res) => {
-        const password = await hash(req.body.password);
+    addNewUser: async (req, res, next) => {
+        try {
+            const { email, password, name } = req.body;
+            const hashedPass = await hash(password);
 
-        Object.assign(req.body, { password });
-        await userService.putUser(req.body);
+            Object.assign(req.body, { password: hashedPass });
+            await userService.putUser(req.body);
 
-        res.json('User added');
+            await mailService.sendMail(email, WELCOME, { userName: name });
+
+            res.json('User added');
+        } catch (e) {
+            next(e);
+        }
     },
     showUsers: async (req, res) => {
         const users = await userService.findUsers();
@@ -18,9 +26,13 @@ module.exports = {
     },
     deleteUser: async (req, res, next) => {
         try {
-            await userService.delUser(req.params.userId);
+            const { id, email, name } = req.body;
 
-            res.json(`user with id:${req.params.userId} deleted`);
+            await userService.delUser(id);
+
+            await mailService.sendMail(email, USER_DELETED, { userName: name });
+
+            res.json(`user with id:${id} deleted`);
         } catch (e) {
             next(e);
         }
@@ -39,9 +51,13 @@ module.exports = {
             next(e);
         }
     },
-    updateUser: async (req, res) => {
-        await userService.updateData(req.params.userId, req.body);
+    updateUser: async (req, res, next) => {
+        try {
+            await userService.updateData(req.params.userId, req.body);
 
-        res.json('User updated');
+            res.json('User updated');
+        } catch (e) {
+            next(e);
+        }
     },
 };

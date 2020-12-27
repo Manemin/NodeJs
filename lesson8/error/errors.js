@@ -25,5 +25,9 @@ module.exports = {
     PERMISSION_DENIED: {
         message: 'Permission denied',
         code: FORBIDDEN
+    },
+    TEMPLATE_NOT_FOUND: {
+        message: 'Template not found',
+        code: NOT_FOUND
     }
 };

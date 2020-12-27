@@ -76,6 +76,7 @@ module.exports = {
 
             if (!result) throw new ErrorHandler(USER_NOT_FOUND.message, USER_NOT_FOUND.code);
 
+            req.body = result;
             next();
         } catch (e) {
             next(e);
