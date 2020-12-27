@@ -1,13 +1,14 @@
 const jwt = require('jsonwebtoken');
 
+const { authService: { findTokenWithUser, findRefreshToken, delRefreshToken } } = require('../services');
+const { constants: { AUTHORIZATION } } = require('../constants');
 const { ErrorHandler, errors: { NOT_VALID_TOKEN, PERMISSION_DENIED } } = require('../error');
 const { token_key: { ACCESS_TOKEN_KEY, REFRESH_TOKEN_KEY } } = require('../config');
-const { authService: { findTokenWithUser, findRefreshToken, delRefreshToken } } = require('../services');
 
 module.exports = {
     checkAccessToken: async (req, res, next) => {
         try {
-            const access_token = req.get('Authorization');
+            const access_token = req.get(AUTHORIZATION);
 
             if (!access_token) throw new ErrorHandler(NOT_VALID_TOKEN.message, NOT_VALID_TOKEN.code);
 
@@ -33,7 +34,7 @@ module.exports = {
     },
     refreshAccessToken: async (req, res, next) => {
         try {
-            const refresh_token = req.get('Authorization');
+            const refresh_token = req.get(AUTHORIZATION);
 
             if (!refresh_token) throw new ErrorHandler(NOT_VALID_TOKEN.message, NOT_VALID_TOKEN.code);
 
