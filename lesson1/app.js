@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 
 // как вариант ;)
@@ -11,24 +11,32 @@ const path = require('path');
 //     fs.renameSync('temp', folder2);
 // }
 
-function swapFiles(dir1, dir2) {
-    const listDir = [dir1, dir2];
-    let listFiles = {};
+async function swapFiles(dir1, dir2) {
+    const listDir = [
+        dir1,
+        dir2
+    ];
+    const listFiles = {};
 
-    const newFolder = (currentFolder) => {
-        const [path] = listDir.filter(folder => folder !== currentFolder);
-        return path;
+    const destination = (currentFolder) => {
+        const [newFolder] = listDir.filter((folder) => folder !== currentFolder);
+        return newFolder;
     };
 
-    listDir.forEach(dir => {
-        listFiles[dir] = fs.readdirSync(dir);
-    })
+    const promisesList = listDir.map(async (dir) => {
+        listFiles[dir] = await fs.readdir(`${dir}`);
+    });
 
+    await Promise.all(promisesList);
+
+    // eslint-disable-next-line array-bracket-newline,array-element-newline
     for (const [dir, list] of Object.entries(listFiles)) {
-        list.map(file => fs.renameSync(path.join(dir, file), path.join(newFolder(dir), file)));
+        list.map(async (file) => {
+            await fs.rename(path.join(dir, file), path.join(destination(dir), file));
+        });
     }
+
     console.log('done');
 }
-
 
 swapFiles('1800', '2000');
