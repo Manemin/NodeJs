@@ -1,3 +1,7 @@
+require('dotenv').config();
+
+const e = process.env;
+
 module.exports = {
     PHOTO_MIME_TYPES: [
         'image/gif',
@@ -15,4 +19,8 @@ module.exports = {
     MAX_FILE_SIZE_DOC: 5 * 1024 * 1024,
     AVATAR_MAX_COUNT: 1,
     DOC_MAX_COUNT: 3,
+    PUBLIC_FOLDER: e.PUBLIC_FOLDER || 'public',
+    USERS_FOLDER: e.USERS_FOLDER_FOLDER || 'users',
+    AVATAR_FOLDER: e.AVATAR_FOLDER || 'avatar',
+    CAR_PHOTOS_FOLDER: e.CAR_PHOTOS_FOLDER || 'car-photos',
 };

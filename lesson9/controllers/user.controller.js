@@ -40,6 +40,8 @@ module.exports = {
 
             await userService.delUser(id);
 
+            await fileService.delUserDir(id);
+
             await mailService.sendMail(email, USER_DELETED, { userName: name });
 
             res.json(`user with id:${id} deleted`);

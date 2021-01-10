@@ -26,18 +26,20 @@ module.exports = (() => {
         const getModels = () => {
             fs.readdir(modelsPath, (err, files) => {
                 files.forEach((file) => {
-                    const [model] = file.split('.');
-                    // eslint-disable-next-line import/no-dynamic-require
-                    const modelPath = require(path.join(modelsPath, file));
+                    if (file !== 'index.js') {
+                        const [model] = file.split('.');
+                        // eslint-disable-next-line import/no-dynamic-require
+                        const modelPath = require(path.join(modelsPath, file));
 
-                    models[model] = modelPath(client, DataTypes);
+                        models[model] = modelPath(client, DataTypes);
+                    }
                 });
             });
         };
         return {
             setModels: () => getModels(),
             getModel: (modelName) => models[modelName],
-            client
+            client,
         };
     };
 

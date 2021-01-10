@@ -1,15 +1,28 @@
 const fs = require('fs-extra').promises;
 const path = require('path');
-const uuid = require('uuid').v1();
+const { v1: uuid } = require('uuid');
+
+const {
+    fileUploadConfig: {
+        PUBLIC_FOLDER,
+        USERS_FOLDER,
+        AVATAR_FOLDER
+    }
+} = require('../config');
 
 module.exports = {
-    delFile: (filePath) => fs.unlink(path.join(process.cwd(), 'public', filePath)),
+    delFile: (filePath) => fs.unlink(path.join(process.cwd(), PUBLIC_FOLDER, `${filePath}`)),
 
-    saveFile: async (file, id, folder = 'avatar') => {
-        const pathWithoutPublic = path.join('users', `${id}`, folder);
-        const pathToSave = path.join(process.cwd(), 'public', pathWithoutPublic);
+    delUserDir: (dir) => fs.rmdir(
+        path.join(process.cwd(), PUBLIC_FOLDER, USERS_FOLDER, `${dir}`),
+        { recursive: true }
+    ),
+
+    saveFile: async (file, id, folder = AVATAR_FOLDER) => {
+        const pathWithoutPublic = path.join(USERS_FOLDER, `${id}`, folder);
+        const pathToSave = path.join(process.cwd(), PUBLIC_FOLDER, pathWithoutPublic);
         const extension = file.name.split('.').pop();
-        const newFileName = `${uuid}.${extension}`;
+        const newFileName = `${uuid()}.${extension}`;
         const pathForDb = path.join(pathWithoutPublic, newFileName);
 
         await fs.mkdir(pathToSave, { recursive: true });
